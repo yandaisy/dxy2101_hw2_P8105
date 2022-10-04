@@ -81,7 +81,7 @@ Of the stations that serve the A train, `r nrow(subway_data %>% filter(name=='A'
 
 ### Load, clean, and use Trash Wheel dataset
 
-```{r mr}
+```{r mr, message=FALSE}
 # Read and clean Mr. Trash Wheel dataset
 mr_data = 
   read_excel('~/Desktop/Data Science I/Homeworks/dxy2101_hw2_P8105/trash.xlsx', sheet = 1) %>%
@@ -101,7 +101,38 @@ prof_data =
   select(dumpster:homes_powered) %>%
   na.omit(prof_data) %>%
   mutate(
-    sports_balls = as.integer(round(sports_balls, 0))
+    sports_balls = as.integer(round(sports_balls, 0)),
+    dumpster = as.character(dumpster)
   )
 ```
 
+```{r join, message=FALSE}
+# Add column indicating trash collector
+mr_data = 
+  data.frame(append(mr_data, c(collector="Mr"), after=1))
+
+prof_data =
+  data.frame(append(prof_data, c(collector="Professor"), after=1))
+
+# Join data frames
+full_df = 
+  full_join(mr_data, prof_data)
+```
+
+The `full_df` dataset contains data on the number of dumpsters and types of trash collected by both Mr. Trash Wheel and Professor Trash Wheel from 2014 to beginning of 2021. In total, there are `r nrow(full_df)` observations. Key variables include: collector, data collected, weight (tons), types of trash collected and amount collected, and number of homes powered.
+
+```{r weight, echo=FALSE}
+prof =
+  full_df %>%
+  filter(collector=="Professor")
+```
+
+The total weight of trash collected by Professor Trash Wheel was `r sum(prof$weight_tons)` tons.
+
+```{r sports, echo=FALSE}
+trash = 
+  full_df %>%
+  filter(collector=="Mr", year == 2020)
+```
+
+The total number of sports balls collected by Mr. Trash Wheel in 2020 was `r sum(trash$sports_balls)`.
