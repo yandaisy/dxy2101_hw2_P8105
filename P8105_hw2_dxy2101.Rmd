@@ -144,6 +144,7 @@ The total number of sports balls collected by Mr. Trash Wheel in 2020 was `r sum
 ### Load, clean, and use FiveThirtyEight datasets
 
 ```{r pols-month, message=FALSE}
+# Clean data in pols-month.csv
 pols_data = 
   read_csv(file = '~/Desktop/Data Science I/Homeworks/dxy2101_hw2_P8105/fivethirtyeight_datasets/pols-month.csv') %>%
   janitor::clean_names() %>%
@@ -167,5 +168,19 @@ pols_tidy_data =
     value = as.numeric(value)
   ) %>%
   select(-value, -day)
+```
+
+```{r snp, message=FALSE}
+# Clean data in snp.csv
+snp_data = 
+  read_csv(file = '~/Desktop/Data Science I/Homeworks/dxy2101_hw2_P8105/fivethirtyeight_datasets/snp.csv') %>%
+  janitor::clean_names() %>%
+  separate(col=date, into=c("month", "day", "year"), sep='/') %>%
+  mutate(month = recode(month, "1" = "Jan", "2" = "Feb",
+                "3" = "Mar", "4" = "Apr", "5" = "May",
+                "6" = "Jun", "7" = "Jul", "8" = "Aug",
+                "9" = "Sep", "10" = "Oct", "11" = "Nov",
+                "12" = "Dec")) %>%
+  relocate(year, .before = month)
 ```
 
