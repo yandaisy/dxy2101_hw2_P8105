@@ -75,6 +75,8 @@ subway_data =
   )
 ```
 
+Now, this data is tidy.
+
 Of the stations that serve the A train, `r nrow(subway_data %>% filter(name=='A', ada==TRUE) %>% distinct(station_name, line))` are ADA compliant.
 
 # Problem 2
@@ -136,3 +138,34 @@ trash =
 ```
 
 The total number of sports balls collected by Mr. Trash Wheel in 2020 was `r sum(trash$sports_balls)`.
+
+# Problem 3
+
+### Load, clean, and use FiveThirtyEight datasets
+
+```{r pols-month, message=FALSE}
+pols_data = 
+  read_csv(file = '~/Desktop/Data Science I/Homeworks/dxy2101_hw2_P8105/fivethirtyeight_datasets/pols-month.csv') %>%
+  janitor::clean_names() %>%
+  mutate(mon = as.character(mon)) %>%
+  separate(col=mon, into=c("year", "month", "day"), sep='-') %>%
+  mutate(month = recode(month, "01" = "Jan", "02" = "Feb",
+                "03" = "Mar", "04" = "Apr", "05" = "May",
+                "06" = "Jun", "07" = "Jul", "08" = "Aug",
+                "09" = "Sep", "10" = "Oct", "11" = "Nov",
+                "12" = "Dec"))
+
+# Make dataset tidy. Add variable for presidents.
+pols_tidy_data = 
+  pivot_longer(
+    pols_data,
+    cols = starts_with("prez"),
+    names_to = "president",
+    names_prefix = "prez_",
+    values_to = "value") %>%
+  mutate(
+    value = as.numeric(value)
+  ) %>%
+  select(-value, -day)
+```
+
