@@ -23,5 +23,31 @@ subway_data =
     )
 ```
 
+```{r name}
+# List variables in dataset
+names(subway_data)
+```
 
+The NYC transit dataset includes the following variables: line, station name, station latitude, station longitude, route numbers 1-11, entrance type, entry, vending, and ADA compliance.
 
+Thus far, data cleaning has comprised of making all of the variable names the same format, retaining relevant variables, and converting the `entry` variable into a logical variable for future analysis. There are `r nrow(subway_data)` rows and `r ncol(subway_data)` columns.
+
+This data is not tidy.
+
+```{r proportion}
+# Number of stations without vending that do not allow entrance
+x = nrow(
+  subway_data %>% 
+  filter(vending=='NO', entry==FALSE) %>% 
+  distinct(station_name, line)
+  )
+
+# Number of stations without vending that do allow entrance
+y = nrow(
+  subway_data %>% 
+  filter(vending=='NO', entry==TRUE) %>% 
+  distinct(station_name, line)
+  )
+```
+
+There are `r nrow(distinct(subway_data, station_name, line))` distinct stations. There are `r nrow(subway_data %>% filter(ada==TRUE) %>% distinct(station_name, line))` stations that are ADA compliant. `r round(y/x, 2)` of the station entrances/exits without vending allow entrance.
