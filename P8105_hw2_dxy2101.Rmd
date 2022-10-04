@@ -34,7 +34,7 @@ Thus far, data cleaning has comprised of making all of the variable names the sa
 
 This data is not tidy.
 
-```{r proportion}
+```{r proportion, echo=FALSE}
 # Number of stations without vending that do not allow entrance
 x = nrow(
   subway_data %>% 
@@ -51,3 +51,27 @@ y = nrow(
 ```
 
 There are `r nrow(distinct(subway_data, station_name, line))` distinct stations. There are `r nrow(subway_data %>% filter(ada==TRUE) %>% distinct(station_name, line))` stations that are ADA compliant. `r round(y/x, 2)` of the station entrances/exits without vending allow entrance.
+
+```{r reformat}
+# Convert all route variables to characters
+subway_data =
+  subway_data %>%
+  mutate(
+    route8 = as.character(route8),
+    route9 = as.character(route9),
+    route10 = as.character(route10),
+    route11 = as.character(route11)
+  )
+  
+# Make route number and route name distinct variables
+subway_data =
+  pivot_longer(
+    subway_data,
+    route1:route11,
+    names_to = "number",
+    names_prefix = "route",
+    values_to = "name"
+  )
+```
+
+Of the stations that serve the A train, `r nrow(subway_data %>% filter(name=='A', ada==TRUE) %>% distinct(station_name, line))` are ADA compliant.
