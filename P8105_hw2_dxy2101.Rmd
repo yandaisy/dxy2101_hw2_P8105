@@ -7,11 +7,12 @@ output: github_document
 
 ```{r setup, message=FALSE}
 library(tidyverse)
+library(readxl)
 ```
 
 # Problem 1
 
-### Load and clean NYC transit dataset
+### Load, clean, and use NYC transit dataset
 
 ```{r clean, message=FALSE}
 subway_data = 
@@ -75,3 +76,32 @@ subway_data =
 ```
 
 Of the stations that serve the A train, `r nrow(subway_data %>% filter(name=='A', ada==TRUE) %>% distinct(station_name, line))` are ADA compliant.
+
+# Problem 2
+
+### Load, clean, and use Trash Wheel dataset
+
+```{r mr}
+# Read and clean Mr. Trash Wheel dataset
+mr_data = 
+  read_excel('~/Desktop/Data Science I/Homeworks/dxy2101_hw2_P8105/trash.xlsx', sheet = 1) %>%
+  janitor::clean_names() %>%
+  select(dumpster:homes_powered) %>%
+  na.omit(mr_data) %>%
+  mutate(
+    sports_balls = as.integer(round(sports_balls, 0))
+  )
+```
+
+```{r prof}
+# Read and clean Professor Trash Wheel dataset
+prof_data =
+  read_excel('~/Desktop/Data Science I/Homeworks/dxy2101_hw2_P8105/trash.xlsx', sheet = 2) %>%
+  janitor::clean_names() %>%
+  select(dumpster:homes_powered) %>%
+  na.omit(prof_data) %>%
+  mutate(
+    sports_balls = as.integer(round(sports_balls, 0))
+  )
+```
+
