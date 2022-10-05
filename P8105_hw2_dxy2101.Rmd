@@ -88,7 +88,7 @@ Of the stations that serve the A train, `r nrow(subway_data %>% filter(name=='A'
 mr_data = 
   read_excel('~/Desktop/Data Science I/Homeworks/dxy2101_hw2_P8105/trash.xlsx', sheet = 1) %>%
   janitor::clean_names() %>%
-  select(dumpster:homes_powered) %>%
+  select(month:homes_powered) %>%
   na.omit(mr_data) %>%
   mutate(
     sports_balls = as.integer(round(sports_balls, 0))
@@ -100,12 +100,9 @@ mr_data =
 prof_data =
   read_excel('~/Desktop/Data Science I/Homeworks/dxy2101_hw2_P8105/trash.xlsx', sheet = 2) %>%
   janitor::clean_names() %>%
-  select(dumpster:homes_powered) %>%
+  select(month:homes_powered) %>%
   na.omit(prof_data) %>%
-  mutate(
-    sports_balls = as.integer(round(sports_balls, 0)),
-    dumpster = as.character(dumpster)
-  )
+  mutate(year = as.character(year))
 ```
 
 ```{r join, message=FALSE}
@@ -121,7 +118,7 @@ full_df =
   full_join(mr_data, prof_data)
 ```
 
-The `full_df` dataset contains data on the number of dumpsters and types of trash collected by both Mr. Trash Wheel and Professor Trash Wheel from 2014 to beginning of 2021. In total, there are `r nrow(full_df)` observations. Key variables include: collector, data collected, weight (tons), types of trash collected and amount collected, and number of homes powered.
+The `full_df` dataset contains data on the amount of and types of trash collected by both Mr. Trash Wheel and Professor Trash Wheel from 2014 to beginning of 2021. In total, there are `r nrow(full_df)` observations. Key variables include: collector, date collected, weight (tons) of trash collected, volume (cubic yards) of trash collected, types of trash collected and amount collected, and number of homes powered.
 
 ```{r weight, echo=FALSE}
 prof =
@@ -137,7 +134,7 @@ trash =
   filter(collector=="Mr", year == 2020)
 ```
 
-The total number of sports balls collected by Mr. Trash Wheel in 2020 was `r sum(trash$sports_balls)`.
+The total number of sports balls collected by Mr. Trash Wheel in 2020 was `r sum(mr_data$sports_balls)`.
 
 # Problem 3
 
