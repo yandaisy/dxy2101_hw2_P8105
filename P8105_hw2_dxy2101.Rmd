@@ -1,7 +1,7 @@
 ---
 title: "P8105_hw2_dxy2101"
 author: "Daisy Yan"
-date: "2022-10-04"
+date: "2022-10-05"
 output: github_document
 ---
 
@@ -24,7 +24,7 @@ subway_data =
     )
 ```
 
-```{r name}
+```{r names subway_data}
 # List variables in dataset
 names(subway_data)
 ```
@@ -117,6 +117,12 @@ prof_data =
 full_df = 
   full_join(mr_data, prof_data)
 ```
+
+```{r names full_df}
+# List variables in dataset
+names(full_df)
+```
+
 
 The `full_df` dataset contains data on the amount of and types of trash collected by both Mr. Trash Wheel and Professor Trash Wheel from 2014 to beginning of 2021. In total, there are `r nrow(full_df)` observations. Key variables include: collector, date collected, weight (tons) of trash collected, volume (cubic yards) of trash collected, types of trash collected and amount collected, and number of homes powered.
 
@@ -231,5 +237,10 @@ pols_snp_unemployment =
 ```
 
 `pols-month.csv`, `snp.csv`, and `unemployment.csv` were imported, cleaned and made tidy to create the `pols_snp_unemployment` dataset containing observations and variables from all three input datasets. `pols-month.csv`contains information on the political standing of national politicians at a given time. `snp.csv` contains information on the S&P market index at a given time. `unemployment.csv` contains information on the percentage of unemployment at a given time. All input datasets were cleaned to ensure that the given time points were organized by year and by month.
+
+```{r names pols_snp_unemployment}
+# List variables in dataset
+names(pols_snp_unemployment)
+```
 
 The resulting dataset, `pols_snp_unemployment`, contains `r nrow(pols_snp_unemployment)` observations and `r ncol(pols_snp_unemployment)` variables. The range of years is (`r range(pols_snp_unemployment$year)`). The key variables included are for a given year and month are the following: number of Republican governors, number of Democrat governors, number of Republican senators, number of Democrat senators, number of Republican representatives, number of Democrat representatives, whether or not the president at the time was a Republican or Democrat, the S&P index during the day and closing, and the percentage of people unemployed.
