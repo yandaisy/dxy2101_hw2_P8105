@@ -61,9 +61,16 @@ subway_data =
     route8 = as.character(route8),
     route9 = as.character(route9),
     route10 = as.character(route10),
-    route11 = as.character(route11)
+    route11 = as.character(route11),
+    entry = as.character(entry),
+    ada = as.character(ada),
+    station_latitude = as.numeric(station_latitude),
+    station_longitude = as.numeric(station_longitude)
   )
   
+```
+
+```{r pivot}
 # Make route number and route name distinct variables
 subway_data =
   pivot_longer(
@@ -77,7 +84,7 @@ subway_data =
 
 Now, this data is tidy.
 
-Of the stations that serve the A train, `r nrow(subway_data %>% filter(name=='A', ada==TRUE) %>% distinct(station_name, line))` are ADA compliant.
+Of the stations that serve the A train, `r nrow(subway_data %>% filter(name=='A', ada=="TRUE") %>% distinct(station_name, line))` are ADA compliant.
 
 # Problem 2
 
@@ -89,10 +96,12 @@ mr_data =
   read_excel('~/Desktop/Data Science I/Homeworks/dxy2101_hw2_P8105/trash.xlsx', sheet = 1) %>%
   janitor::clean_names() %>%
   select(month:homes_powered) %>%
-  na.omit(mr_data) %>%
-  mutate(
-    sports_balls = as.integer(round(sports_balls, 0))
-  )
+  na.omit(mr_data)
+
+#The following code is no longer needed with the updated dataset 
+  #mutate(
+    #sports = as.integer(round(sports_balls, 0))
+  #)
 ```
 
 ```{r prof}
@@ -123,7 +132,6 @@ full_df =
 names(full_df)
 ```
 
-
 The `full_df` dataset contains data on the amount of and types of trash collected by both Mr. Trash Wheel and Professor Trash Wheel from 2014 to beginning of 2021. In total, there are `r nrow(full_df)` observations. Key variables include: collector, date collected, weight (tons) of trash collected, volume (cubic yards) of trash collected, types of trash collected and amount collected, and number of homes powered.
 
 ```{r weight, echo=FALSE}
@@ -132,7 +140,7 @@ prof =
   filter(collector=="Professor")
 ```
 
-The total weight of trash collected by Professor Trash Wheel was `r sum(prof$weight_tons)` tons.
+The total weight of trash collected by Professor Trash Wheel was `r sum(prof$weight)` tons.
 
 ```{r sports, echo=FALSE}
 trash = 
@@ -140,7 +148,7 @@ trash =
   filter(collector=="Mr", year == 2020)
 ```
 
-The total number of sports balls collected by Mr. Trash Wheel in 2020 was `r sum(mr_data$sports_balls)`.
+The total number of sports balls collected by Mr. Trash Wheel in 2020 was `r sum(mr_data$sports)`.
 
 # Problem 3
 
@@ -230,10 +238,11 @@ unem_tidy_data =
 
 ```{r full, message=FALSE}
 pols_snp =
-  full_join(pols_tidy_data, snp_data)
+  left_join(snp_data, pols_tidy_data)
 
 pols_snp_unemployment = 
-  full_join(pols_snp, unem_tidy_data)
+  left_join(pols_snp, unem_tidy_data) %>%
+  na.omit(pols_snp_unemployment)
 ```
 
 `pols-month.csv`, `snp.csv`, and `unemployment.csv` were imported, cleaned and made tidy to create the `pols_snp_unemployment` dataset containing observations and variables from all three input datasets. `pols-month.csv`contains information on the political standing of national politicians at a given time. `snp.csv` contains information on the S&P market index at a given time. `unemployment.csv` contains information on the percentage of unemployment at a given time. All input datasets were cleaned to ensure that the given time points were organized by year and by month.
